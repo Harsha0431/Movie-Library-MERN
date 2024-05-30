@@ -4,7 +4,7 @@ const useThemeStore = create((set) => ({
   isDarkTheme: localStorage.getItem("darkTheme") === "true",
   updateTheme: (newTheme) => set(() => {
     localStorage.setItem("darkTheme", newTheme);
-    const element = document.getElementById('root') || null
+    const element = document.getElementById("root__body") || null;
     if (element != null) {
       if (newTheme) {
         element.classList.add("dark");

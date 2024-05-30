@@ -22,7 +22,7 @@ function App() {
   }, []);
 
   useEffect(() => {
-    const element = document.getElementById("root") || null;
+    const element = document.getElementById("root__body") || null;
     if (element != null) {
       if (isDarkTheme) {
         element.classList.add("dark");
