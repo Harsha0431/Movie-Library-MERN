@@ -11,8 +11,8 @@ export default function FooterNav() {
 
   return (
     <div>
-      <div className="flex dark:bg-[#f5f5f5] bg-[#101415] w-fit p-1 shadow-box-up rounded-2xl dark:bg-box-dark dark:shadow-box-dark-out">
-        <div className="rounded-2xl w-full flex gap-x-6 items-center justify-center p-2.5">
+      <div className="flex dark:bg-[#f5f5f5] bg-[#101415] w-fit rounded-2xl">
+        <div className="rounded-2xl w-full flex gap-x-6 items-center justify-center p-3">
           <Link
             to={"/home"}
             className="inline-flex items-center border-transparent focus:opacity-100 font-medium rounded-full text-sm text-center"
@@ -44,6 +44,23 @@ export default function FooterNav() {
                 />
               </svg>
             </TopTooltip>
+          </Link>
+          <Link className="mx-2 relative" to={"/search"}>
+            <button className="rounded-full p-2 absolute left-1/2 transform -translate-x-1/2 -top-11 bg-[#101415] dark:bg-[#f5f5f5]">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth={1.5}
+                className="size-7 dark:stroke-[#101415db] dark:hover:stroke-[#101415] stroke-[#f5f5f5da] hover:stroke-[#f5f5f5] transition-all"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z"
+                />
+              </svg>
+            </button>
           </Link>
           {isLoggedIn ? (
             <Link
