@@ -1,13 +1,44 @@
-import { Link } from 'react-router-dom';
-import TopTooltip from '../Components/TopTooltip';
-import useUserStore from '../Stores/UserStore';
-import useThemeStore from '../Stores/ThemeStore';
+import { Link } from "react-router-dom";
+import TopTooltip from "../Components/TopTooltip";
+import useUserStore from "../Stores/UserStore";
+import useThemeStore from "../Stores/ThemeStore";
+import { useEffect, useRef, useState } from "react";
 
 export default function FooterNav() {
   const isLoggedIn = useUserStore((state) => state.isLoggedIn);
   const isDarkTheme = useThemeStore((state) => state.isDarkTheme);
   const updateTheme = useThemeStore((state) => state.updateTheme);
+  const userName = useUserStore((state) => state.name);
+  const handleUserLogout = useUserStore((state) => state.handleUserLogout);
 
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const dropdownRef = useRef(null);
+
+  const handleClickOutside = (event) => {
+    if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+      setIsDropdownOpen(false);
+    }
+  };
+
+  const toggleDropdown = () => {
+    setIsDropdownOpen((prevState) => !prevState);
+  };
+
+  function handleLogoutBtnClick() {
+    setIsDropdownOpen(false);
+    handleUserLogout();
+  }
+
+  useEffect(() => {
+    if (isDropdownOpen) {
+      document.addEventListener("mousedown", handleClickOutside);
+    } else {
+      document.removeEventListener("mousedown", handleClickOutside);
+    }
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [isDropdownOpen]);
 
   return (
     <div>
@@ -63,11 +94,11 @@ export default function FooterNav() {
             </button>
           </Link>
           {isLoggedIn ? (
-            <Link
-              href="href"
-              className="inline-flex items-center border-transparent focus:opacity-100 font-medium rounded-full text-sm text-center"
-            >
-              <TopTooltip text={"Account"}>
+            <div ref={dropdownRef} className="flex items-center justify-center relative">
+              <button
+                onClick={toggleDropdown}
+                className="inline-flex items-center border-transparent focus:opacity-100 font-medium rounded-full text-sm text-center"
+              >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   viewBox="0 0 24 24"
@@ -80,8 +111,19 @@ export default function FooterNav() {
                     clipRule="evenodd"
                   />
                 </svg>
-              </TopTooltip>
-            </Link>
+              </button>
+              {isDropdownOpen && (
+                <div className="dropdown__container font-roboto text-[calc(12px+0.2dvw)] absolute bottom-[100%] divide-y-2 mb-4 py-1 left-0 dark:divide-[#10141553] divide-[#f5f5f577] dark:bg-[#f5f5f5] dark:text-black transition-all text-[#f5f5f5] bg-[#101415] shadow-lg rounded-lg px-1">
+                  <span className="px-3 font-semibold">{userName}</span>
+                  <button
+                    onClick={handleLogoutBtnClick}
+                    className="px-3 py-1 transition-all hover:font-medium"
+                  >
+                    Logout
+                  </button>
+                </div>
+              )}
+            </div>
           ) : (
             <Link
               to={"/login"}
