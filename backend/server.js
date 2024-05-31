@@ -73,3 +73,7 @@ async function getTopMovieList(page = 1) {
   if (data.Response == "True") return data.Search;
   return [];
 }
+
+// Library Routes
+const libraryRouter = require('./router/libraryRouter');
+app.use('/api/library', verifyToken,libraryRouter);

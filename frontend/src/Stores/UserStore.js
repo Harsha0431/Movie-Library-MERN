@@ -7,6 +7,7 @@ const useUserStore = create((set) => ({
   id: "",
   email: "",
   name: "",
+  userPlaylist: [],
   handleUserLogin: (data) =>
     set((state) => {
       setCookie('access_token', data.token, 7);
