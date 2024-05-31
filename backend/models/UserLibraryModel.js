@@ -16,6 +16,12 @@ const model = new mongoose.Schema({
     ref: "User.email",
     required: true,
   },
+  thumbnail: {
+    type: String,
+    required: true,
+    default:
+      "https://images.pexels.com/photos/3052727/pexels-photo-3052727.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+  },
 });
 
 const UserLibrary = mongoose.model("UserLibrary", model);

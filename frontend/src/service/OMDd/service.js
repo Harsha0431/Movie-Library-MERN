@@ -1,11 +1,11 @@
-const OMDb_API_KEY = import.meta.env.VITE_OMBb_API_KEY;
-const OMDb_URI = import.meta.env.OMBb_URI;
-
+import axios from 'axios';
+const OMDb_API_KEY = import.meta.env.VITE_OMDb_API_KEY;
+const OMDb_URI = import.meta.env.VITE_OMDb_URI;
 
 export async function handleSearchService(query, page = 1) {
     try {
-        const result = await fetch(`${OMDb_URI}${OMDb_API_KEY}&q=${query}&page=${page}`);
-        const response = await result.json();
+        const result = await axios.get(`${OMDb_URI}${OMDb_API_KEY}&s=${'*'+query+'*'}&page=${page}`);
+        const response = result.data;
         if (response.Response == "True") {
             return {
               code: 1,
@@ -17,6 +17,7 @@ export async function handleSearchService(query, page = 1) {
             };
         }
         else {
+          console.log(response);
             if (response.Error == "Movie not found!") {
               return { code: 0, message: "No movies found with that query." };
             } else if (response.Error == "Too many results.") {
@@ -33,6 +34,7 @@ export async function handleSearchService(query, page = 1) {
         }
     }
     catch (err) {
+      console.log(err);
         return {
           code: -1,
           message: "Network error, please check your connection.",

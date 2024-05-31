@@ -1,5 +1,4 @@
-import './App.css'
-import { Routes, Route, useNavigate } from "react-router-dom";
+import { Routes, Route, useNavigate, Link } from "react-router-dom";
 import HomeView from './Views/HomeView'
 import LoginView from './Views/LoginView'
 import RegisterView from './Views/RegisterView'
@@ -13,6 +12,10 @@ import useToastStore from './Stores/ToastStore';
 import ToastView from './Components/ToastView';
 import { getCookie } from './utils/cookieHelpers';
 import { verifyTokenService } from './service/auth/service';
+import Camera from "./assets/camera.svg";
+import SearchView from "./Views/SearchView";
+import MovieView from "./Views/MovieView";
+
 
 function App() {
   const isDarkTheme = useThemeStore((state) => state.isDarkTheme);
@@ -66,7 +69,7 @@ function App() {
 
   return (
     <div
-      className={`dark:bg-[#101415] bg-[#f5f5f5] w-[100dvw] h-[100dvh] text-black dark:text-white`}
+      className={`dark:bg-[#101415] bg-[#f5f5f5] w-[100dvw] min-h-[100dvh] pb-24 text-black dark:text-white`}
     >
       {showMainLoader && (
         <div className="z-[10000] absolute inset-0 flex justify-center items-center backdrop-brightness-50">
@@ -75,7 +78,7 @@ function App() {
       )}
       {toastList.length > 0 && (
         <div className="absolute top-2 left-0 z-[10000] justify-center items-center w-full">
-          <div className='flex flex-col w-full gap-y-1 justify-center items-center'>
+          <div className="flex flex-col w-full gap-y-1 justify-center items-center">
             {toastList.map((toast, index) => {
               return (
                 <ToastView key={`${toast.message}-${index}`} data={toast} />
@@ -84,13 +87,29 @@ function App() {
           </div>
         </div>
       )}
-      <nav className="fixed bottom-2 flex justify-center w-full z-[1000]">
-        <FooterNav />
+      <nav className="w-full flex justify-center items-center text-center ">
+        <Link to={"/"}>
+          <button className="flex py-1 px-2 mb-1.5 justify-center items-center text-center ">
+            <img
+              src={Camera}
+              alt={"MovieHub Logo"}
+              className="size-16 md:size-20"
+            />
+            <h2 className="font-josefin text-[calc(22px+0.2dvw)] md:text-[calc(24px+0.2dvw)]">
+              MovieHub
+            </h2>
+          </button>
+        </Link>
       </nav>
+      <footer className="fixed bottom-2 flex justify-center w-full z-[1000]">
+        <FooterNav />
+      </footer>
       <Routes>
         <Route path="/" element={<HomeView />} />
         <Route path="/login" element={<LoginView />} />
         <Route path="/signup" element={<RegisterView />} />
+        <Route path="/search" element={<SearchView />} />
+        <Route path="/preview/:id" element={<MovieView />} />
       </Routes>
     </div>
   );

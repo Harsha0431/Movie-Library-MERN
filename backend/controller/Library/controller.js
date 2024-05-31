@@ -6,6 +6,7 @@ async function createLibrary(request, response) {
     const email = payload.email;
     const title = request.body.title || null;
     const visibility = request.body.visibility || "private";
+    const thumbnail = request.body.thumbnail || null
     if (title == null || title.length == 0) {
       return response.json({ code: 0, message: "Invalid library title" });
     }
@@ -19,6 +20,9 @@ async function createLibrary(request, response) {
         message:
           "Invalid visibility option. Please select either 'public' or 'private'.",
       });
+    }
+    if (thumbnail == null || thumbnail.length == 0) {
+      return response.json({ code: 0, message: "Please provide thumbnail image for library" });
     }
     const library = new UserLibrary({
       title: title,

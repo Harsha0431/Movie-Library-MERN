@@ -2,16 +2,43 @@
 @tailwind components;
 @tailwind utilities;
 
-*{
+* {
   margin: 0;
   padding: 0;
 }
 
 body {
   box-sizing: border-box;
-  overflow: hidden;
   margin: 0;
   padding: 0;
+  overflow-x: hidden;
+}
+
+::-webkit-scrollbar {
+  width: 3px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #434343;
+  border: 100rem;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+input[type="search"]::-webkit-search-decoration,
+input[type="search"]::-webkit-search-cancel-button,
+input[type="search"]::-webkit-search-results-button,
+input[type="search"]::-webkit-search-results-decoration {
+  display: none;
 }
 
 #root {
@@ -23,9 +50,95 @@ body {
   height: 100%;
 }
 
-
-.auth__container{
-  background-image: url('./assets/MoviePopcorn.webp');
+.auth__container {
+  background-image: url("./assets/MoviePopcorn.webp");
   background-repeat: no-repeat;
   background-size: cover;
+}
+
+.library__card {
+  min-width: calc(99vw / 5 - 1rem);
+  max-width: calc(99vw / 5 - 1rem);
+  min-height: calc((4 / 3) * (99vw / 5 - 1rem));
+  max-height: calc((4 / 3) * (99vw / 5 - 1rem));
+}
+
+@media (max-width: 1200px) {
+  .library__card {
+    min-width: calc(99vw / 4 - 1rem);
+    max-width: calc(99vw / 4 - 1rem);
+    min-height: calc((4 / 3) * (99vw / 4 - 1rem));
+    max-height: calc((4 / 3) * (99vw / 4 - 1rem));
+  }
+}
+
+@media (max-width: 840px) {
+  .library__card {
+    min-width: calc(99vw / 3 - 1rem);
+    max-width: calc(99vw / 3 - 1rem);
+    min-height: calc((4 / 3) * (99vw / 3 - 1rem));
+    max-height: calc((4 / 3) * (99vw / 3 - 1rem));
+  }
+}
+
+@media (max-width: 640px) {
+  .library__card {
+    min-width: calc(99vw / 2 - 1rem);
+    max-width: calc(99vw / 2 - 1rem);
+    min-height: calc((4 / 3) * (99vw / 2 - 1rem));
+    max-height: calc((4 / 3) * (99vw / 2 - 1rem));
+  }
+}
+
+@media (max-width: 330px) {
+  .library__card {
+    min-width: calc(99vw - 1rem);
+    max-width: calc(99vw - 1rem);
+    min-height: calc((4 / 3) * (99vw - 1rem));
+    max-height: 360px;
+  }
+}
+
+/* Search result cards*/
+.search_movie__card {
+  min-width: calc(99vw / 5 - 1rem);
+  max-width: calc(99vw / 5 - 1rem);
+  min-height: calc((3 / 2) * (99vw / 5 - 1rem));
+  max-height: calc((3 / 2) * (99vw / 5 - 1rem));
+}
+
+@media (max-width: 1200px) {
+  .search_movie__card {
+    min-width: calc(99vw / 4 - 1rem);
+    max-width: calc(99vw / 4 - 1rem);
+    min-height: calc((3 / 2) * (99vw / 4 - 1rem));
+    max-height: calc((3 / 2) * (99vw / 4 - 1rem));
+  }
+}
+
+@media (max-width: 840px) {
+  .search_movie__card {
+    min-width: calc(99vw / 3 - 1rem);
+    max-width: calc(99vw / 3 - 1rem);
+    min-height: calc((3 / 2) * (99vw / 3 - 1rem));
+    max-height: calc((3 / 2) * (99vw / 3 - 1rem));
+  }
+}
+
+@media (max-width: 640px) {
+  .search_movie__card {
+    min-width: calc(99vw / 2 - 1rem);
+    max-width: calc(99vw / 2 - 1rem);
+    min-height: calc((3 / 2) * (99vw / 2 - 1rem));
+    max-height: calc((3 / 2) * (99vw / 2 - 1rem));
+  }
+}
+
+@media (max-width: 330px) {
+  .search_movie__card {
+    min-width: calc(99vw - 1rem);
+    max-width: calc(99vw - 1rem);
+    min-height: calc((3 / 2) * (99vw - 1rem));
+    max-height: 360px;
+  }
 }

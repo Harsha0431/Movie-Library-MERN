@@ -45,7 +45,7 @@ export default function FooterNav() {
       <div className="flex dark:bg-[#f5f5f5] bg-[#101415] w-fit rounded-2xl">
         <div className="rounded-2xl w-full flex gap-x-6 items-center justify-center p-3">
           <Link
-            to={"/home"}
+            to={"/"}
             className="inline-flex items-center border-transparent focus:opacity-100 font-medium rounded-full text-sm text-center"
           >
             <TopTooltip text={"Home"}>

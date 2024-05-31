@@ -7,7 +7,7 @@ const useUserStore = create((set) => ({
   id: "",
   email: "",
   name: "",
-  userPlaylist: [],
+  userLibrary: [],
   handleUserLogin: (data) =>
     set((state) => {
       setCookie('access_token', data.token, 7);
@@ -32,6 +32,9 @@ const useUserStore = create((set) => ({
         name: '',
       };
     }),
+  updateUserLibrary: (list) => set((state) => {
+    return {...state, userLibrary: list}
+  })
 }));
 
 export default useUserStore

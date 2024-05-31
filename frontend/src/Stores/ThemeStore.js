@@ -8,8 +8,12 @@ const useThemeStore = create((set) => ({
     if (element != null) {
       if (newTheme) {
         element.classList.add("dark");
+        document.body.classList.add("bg-[#101415]");
+        document.body.classList.remove("#f5f5f5");
       } else {
         element.classList.remove("dark");
+        document.body.classList.remove("bg-[#101415]");
+        document.body.classList.add("#f5f5f5");
       }
     }
     
