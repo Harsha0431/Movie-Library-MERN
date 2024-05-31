@@ -3,18 +3,16 @@ import "../index.css";
 import useHomeStore from "../Stores/HomeStore.js";
 import Camera from '../assets/camera.svg';
 import {Link, useNavigate} from 'react-router-dom'
-import { loginService, verifyTokenService } from "../service/auth/service.js";
+import { loginService } from "../service/auth/service.js";
 import useLoaderStore from "../Stores/LoaderStore.js";
 import useUserStore from "../Stores/UserStore.js";
 import useToastStore from "../Stores/ToastStore.js";
-import { getCookie } from "../utils/cookieHelpers.js";
 
 export default function LoginView() {
   const title = useHomeStore((state) => state.title);
   const updateMainLoader = useLoaderStore((state) => state.updateMainLoader);
   const handleUserLogin = useUserStore((state) => state.handleUserLogin);
   const addToast = useToastStore((state) => state.addToast);
-  const isLoggedIn = useUserStore((state) => state.isLoggedIn);
 
   const navigate = useNavigate();
 
@@ -39,28 +37,8 @@ export default function LoginView() {
     }
   }
 
-  async function verifyToken(token) {
-        updateMainLoader(true);
-    const result = await verifyTokenService(token);
-    updateMainLoader(false);
-    if (result.code == 1) {
-      result.data = {...result.data, token: token}
-      handleUserLogin(result.data);
-      addToast(result.message, 'success');
-      navigate('/');
-    }
-  }
-
   useEffect(() => {
-    if (isLoggedIn) {
-      navigate('/');
-      return;
-    }
     document.title='Login | MovieHub'
-    const cookieAccessToken = getCookie('access_token') || null;
-    if (cookieAccessToken != null && cookieAccessToken.length > 0) {
-      verifyToken(cookieAccessToken);
-    }
   }, []);
 
   return (

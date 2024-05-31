@@ -11,17 +11,42 @@ import useLoaderStore from "./Stores/LoaderStore";
 import MainLoader from './Components/MainLoader';
 import useToastStore from './Stores/ToastStore';
 import ToastView from './Components/ToastView';
+import { getCookie } from './utils/cookieHelpers';
+import { verifyTokenService } from './service/auth/service';
 
 function App() {
   const isDarkTheme = useThemeStore((state) => state.isDarkTheme);
   const isLoggedIn = useUserStore((state) => state.isLoggedIn)
-  const navigator = useNavigate();
+  const navigate = useNavigate();
   const showMainLoader = useLoaderStore((state) => state.showMainLoader);
-  const toastList = useToastStore((state)=>state.toastList)
+  const toastList = useToastStore((state) => state.toastList)
+  const updateMainLoader = useLoaderStore((state) => state.updateMainLoader);
+  const handleUserLogin = useUserStore((state) => state.handleUserLogin);
+  
+  async function verifyToken(token) {
+    updateMainLoader(true);
+    const result = await verifyTokenService(token);
+    updateMainLoader(false);
+    if (result.code == 1) {
+      result.data = { ...result.data, token: token };
+      handleUserLogin(result.data);
+      navigate("/");
+    }
+    else {
+      navigate('/login');
+    }
+  }
 
   useEffect(() => {
+    document.title = "MovieHub";
     if (!isLoggedIn) {
-      navigator('/login');
+      const cookieAccessToken = getCookie("access_token") || null;
+      if (cookieAccessToken != null && cookieAccessToken.length > 0) {
+        verifyToken(cookieAccessToken);
+      }
+      else {
+        navigate('/login');
+      }
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
