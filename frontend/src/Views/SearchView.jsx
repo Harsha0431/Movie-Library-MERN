@@ -4,19 +4,33 @@ import useToastStore from "../Stores/ToastStore";
 import { handleSearchService } from "../service/OMDd/service";
 import "../index.css";
 import FooterLoader from "../Components/FooterLoader";
-import {Link} from 'react-router-dom'
+import { Link } from "react-router-dom";
+import useSearchStore from "../Stores/SearchStore";
 
 export default function SearchView() {
   const [searchText, setSearchText] = useState("");
-  const [searchDataFetched, setSearchDataFetched] = useState(false);
-  const [searchData, setSearchData] = useState([]);
-  const updateMainLoader = useLoaderStore((state) => state.updateMainLoader);
-  const [page, setPage] = useState(1);
-  const [totalResults, setTotalResults] = useState(0);
-  const addToast = useToastStore((state) => state.addToast);
-  const [prevSearchText, setPrevSearchText] = useState("");
+  const searchDataFetched = useSearchStore((state) => state.searchDataFetched);
+  const updateSearchDataFetched = useSearchStore(
+    (state) => state.updateSearchDataFetched
+  );
+  const searchData = useSearchStore((state) => state.searchData);
+  const updateSearchData = useSearchStore((state) => state.updateSearchData);
 
+  const updateMainLoader = useLoaderStore((state) => state.updateMainLoader);
+
+  const page = useSearchStore((state) => state.page);
+  const updatePage = useSearchStore((state) => state.updatePage);
+  const totalResults = useSearchStore((state) => state.totalResults);
+  const updateTotalResults = useSearchStore(
+    (state) => state.updateTotalResults
+  );
+  const addToast = useToastStore((state) => state.addToast);
   const [showFooterLoader, setShowFooterLoader] = useState(false);
+
+  const prevSearchText = useSearchStore((state) => state.prevSearchText);
+  const updatePrevSearchText = useSearchStore(
+    (state) => state.updatePrevSearchText
+  );
 
   async function fetchData(query, currentPage = 1) {
     const result = await handleSearchService(query, currentPage);
@@ -25,17 +39,17 @@ export default function SearchView() {
 
   async function handleSearchFormSubmit(e) {
     e.preventDefault();
-    setPage(1);
-    setTotalResults(0);
-    setSearchData([]);
-    setSearchDataFetched(false);
+    updateTotalResults(0);
+    updateSearchData([]);
+    updateSearchDataFetched(false);
     updateMainLoader(true);
+    updatePage(1);
     const result = await fetchData(searchText);
-    setSearchDataFetched(true);
+    updateSearchDataFetched(true);
     if (result.code == 1) {
-      setSearchData(result.data);
-      setTotalResults(result.totalResults);
-      setPrevSearchText(searchText);
+      updateSearchData(result.data);
+      updateTotalResults(result.totalResults);
+      updatePrevSearchText(searchText);
     } else {
       addToast(result.message, result.code == 0 ? "warning" : "error");
     }
@@ -43,6 +57,7 @@ export default function SearchView() {
   }
 
   useEffect(() => {
+    if (prevSearchText.length > searchText.length) setSearchText(prevSearchText);
     if (searchData.length < totalResults) lastChildObserver();
   }, [searchData.length]);
 
@@ -54,9 +69,9 @@ export default function SearchView() {
       setShowFooterLoader(false);
       if (result.code == 1) {
         const data = searchData.concat(result.data);
-        setSearchData(data);
-        setPage(newPage);
-        setTotalResults(result.totalResults);
+        updateSearchData(data);
+        updatePage(newPage);
+        updateTotalResults(result.totalResults);
       } else {
         addToast(result.message, result.code == 0 ? "warning" : "error");
       }
@@ -69,8 +84,8 @@ export default function SearchView() {
       async ([entry]) => {
         if (entry.isIntersecting) {
           element.id = null;
-            await observerFetchData();
-            observer.unobserve(element);
+          await observerFetchData();
+          observer.unobserve(element);
         }
       },
       {
@@ -139,8 +154,8 @@ export default function SearchView() {
               <div className="search_result__container pt-3 max-ssm:pt-1.5 flex flex-col gap-y-6 justify-center items-center">
                 <div className="px-2 max-ssm:px-1 grid items-center grid-cols-5 max-xxl:grid-cols-4 gap-x-4 gap-y-5 max-lg:grid-cols-3 max-sm:grid-cols-2 max-vvsm:grid-cols-1">
                   {searchData.map((library, index) => (
-                      <Link
-                        to={`/preview/${window.btoa(library.imdbID)}`}
+                    <Link
+                      to={`/preview/${window.btoa(library.imdbID)}`}
                       key={`${library.Title}-${index}`}
                       id={
                         index == searchData.length - 1

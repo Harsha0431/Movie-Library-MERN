@@ -1,12 +1,13 @@
 import { useEffect, useState } from "react";
 import "../index.css";
 import useHomeStore from "../Stores/HomeStore.js";
-import Camera from '../assets/camera.svg';
-import {Link, useNavigate} from 'react-router-dom'
+import Camera from "../assets/camera.svg";
+import { Link, useNavigate } from "react-router-dom";
 import { loginService } from "../service/auth/service.js";
 import useLoaderStore from "../Stores/LoaderStore.js";
 import useUserStore from "../Stores/UserStore.js";
 import useToastStore from "../Stores/ToastStore.js";
+import { useHistoryPaths } from "../Components/HistoryProvider";
 
 export default function LoginView() {
   const title = useHomeStore((state) => state.title);
@@ -14,31 +15,38 @@ export default function LoginView() {
   const handleUserLogin = useUserStore((state) => state.handleUserLogin);
   const addToast = useToastStore((state) => state.addToast);
 
+  const history = useHistoryPaths();
   const navigate = useNavigate();
 
   const [userEmail, setUserEmail] = useState("");
-  const [userPassword, setUserPassword] = useState('');
+  const [userPassword, setUserPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
 
   async function handleLoginFormSubmit(e) {
     e.preventDefault();
     updateMainLoader(true);
     setShowPassword(false);
-    const result = await loginService({ email: userEmail, password: userPassword });
+    const result = await loginService({
+      email: userEmail,
+      password: userPassword,
+    });
     updateMainLoader(false);
     if (result.code == 1) {
       handleUserLogin(result.data);
-      addToast('Login Successful', 'success');
-      navigate('/');
-    }
-    else {
+      addToast("Login Successful", "success");
+      if(history.length==1)
+        navigate("/");
+      else {
+        navigate(history[history.length-2]);
+      }
+    } else {
       addToast(result.message, result.code == 0 ? "warning" : "error");
-      setUserPassword('');
+      setUserPassword("");
     }
   }
 
   useEffect(() => {
-    document.title='Login | MovieHub'
+    document.title = "Login | MovieHub";
   }, []);
 
   return (

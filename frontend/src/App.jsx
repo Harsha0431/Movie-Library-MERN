@@ -1,31 +1,39 @@
-import { Routes, Route, useNavigate, Link } from "react-router-dom";
-import HomeView from './Views/HomeView'
-import LoginView from './Views/LoginView'
-import RegisterView from './Views/RegisterView'
+import {
+  Routes,
+  Route,
+  useNavigate,
+  useLocation,
+} from "react-router-dom";
+import HomeView from "./Views/HomeView";
+import LoginView from "./Views/LoginView";
+import RegisterView from "./Views/RegisterView";
 import useThemeStore from "./Stores/ThemeStore";
-import FooterNav from './Components/FooterNav'
-import { useEffect } from 'react'
-import useUserStore from './Stores/UserStore';
+import FooterNav from "./Components/FooterNav";
+import { useEffect } from "react";
+import useUserStore from "./Stores/UserStore";
 import useLoaderStore from "./Stores/LoaderStore";
-import MainLoader from './Components/MainLoader';
-import useToastStore from './Stores/ToastStore';
-import ToastView from './Components/ToastView';
-import { getCookie } from './utils/cookieHelpers';
-import { verifyTokenService } from './service/auth/service';
-import Camera from "./assets/camera.svg";
+import MainLoader from "./Components/MainLoader";
+import useToastStore from "./Stores/ToastStore";
+import ToastView from "./Components/ToastView";
+import { getCookie } from "./utils/cookieHelpers";
+import { verifyTokenService } from "./service/auth/service";
 import SearchView from "./Views/SearchView";
 import MovieView from "./Views/MovieView";
-
+import { useHistoryPaths } from "./Components/HistoryProvider";
+import NavbarView from "./Components/NavbarView";
 
 function App() {
   const isDarkTheme = useThemeStore((state) => state.isDarkTheme);
-  const isLoggedIn = useUserStore((state) => state.isLoggedIn)
+  const isLoggedIn = useUserStore((state) => state.isLoggedIn);
   const navigate = useNavigate();
+  const location = useLocation();
   const showMainLoader = useLoaderStore((state) => state.showMainLoader);
-  const toastList = useToastStore((state) => state.toastList)
+  const toastList = useToastStore((state) => state.toastList);
   const updateMainLoader = useLoaderStore((state) => state.updateMainLoader);
   const handleUserLogin = useUserStore((state) => state.handleUserLogin);
-  
+
+  const history = useHistoryPaths();
+
   async function verifyToken(token) {
     updateMainLoader(true);
     const result = await verifyTokenService(token);
@@ -33,26 +41,30 @@ function App() {
     if (result.code == 1) {
       result.data = { ...result.data, token: token };
       handleUserLogin(result.data);
-      navigate("/");
-    }
-    else {
-      navigate('/login');
+      if (history.length == 1) navigate("/");
+      else {
+        navigate(history[history.length - 2]);
+      }
+    } else {
+      navigate("/login");
     }
   }
 
   useEffect(() => {
     document.title = "MovieHub";
+  }, []);
+
+  useEffect(() => {
     if (!isLoggedIn) {
       const cookieAccessToken = getCookie("access_token") || null;
       if (cookieAccessToken != null && cookieAccessToken.length > 0) {
         verifyToken(cookieAccessToken);
-      }
-      else {
-        navigate('/login');
+      } else {
+        navigate("/login");
       }
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isLoggedIn]);
 
   useEffect(() => {
     const element = document.getElementById("root__body") || null;
@@ -87,19 +99,15 @@ function App() {
           </div>
         </div>
       )}
-      <nav className="w-full flex justify-center items-center text-center ">
-        <Link to={"/"}>
-          <button className="flex py-1 px-2 mb-1.5 justify-center items-center text-center ">
-            <img
-              src={Camera}
-              alt={"MovieHub Logo"}
-              className="size-16 md:size-20"
-            />
-            <h2 className="font-josefin text-[calc(22px+0.2dvw)] md:text-[calc(24px+0.2dvw)]">
-              MovieHub
-            </h2>
-          </button>
-        </Link>
+      <nav
+        className={`${
+          location.pathname.includes("login") ||
+          location.pathname.includes("signup")
+            ? "hidden"
+            : "flex"
+        } flex w-full justify-center items-center text-center`}
+      >
+        <NavbarView />
       </nav>
       <footer className="fixed bottom-2 flex justify-center w-full z-[1000]">
         <FooterNav />
@@ -115,4 +123,4 @@ function App() {
   );
 }
 
-export default App
+export default App;
