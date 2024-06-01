@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import "../index.css";
 import useHomeStore from "../Stores/HomeStore.js";
 import Camera from "../assets/camera.svg";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { loginService } from "../service/auth/service.js";
 import useLoaderStore from "../Stores/LoaderStore.js";
 import useUserStore from "../Stores/UserStore.js";
@@ -14,13 +14,25 @@ export default function LoginView() {
   const updateMainLoader = useLoaderStore((state) => state.updateMainLoader);
   const handleUserLogin = useUserStore((state) => state.handleUserLogin);
   const addToast = useToastStore((state) => state.addToast);
+  const isLoggedIn = useUserStore((state) => state.isLoggedIn);
 
   const history = useHistoryPaths();
   const navigate = useNavigate();
+  const location = useLocation();
 
   const [userEmail, setUserEmail] = useState("");
   const [userPassword, setUserPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+
+  const moveBack = () => {
+    for (let i = history.length-1; i >= 0; i--) {
+      if (history[i] != location.pathname) {
+        navigate(history[i]);
+        return;
+      }
+    }
+    navigate("/");
+  };
 
   async function handleLoginFormSubmit(e) {
     e.preventDefault();
@@ -34,11 +46,7 @@ export default function LoginView() {
     if (result.code == 1) {
       handleUserLogin(result.data);
       addToast("Login Successful", "success");
-      if(history.length==1)
-        navigate("/");
-      else {
-        navigate(history[history.length-2]);
-      }
+      moveBack();
     } else {
       addToast(result.message, result.code == 0 ? "warning" : "error");
       setUserPassword("");
@@ -47,6 +55,9 @@ export default function LoginView() {
 
   useEffect(() => {
     document.title = "Login | MovieHub";
+    if (isLoggedIn) {
+      moveBack();
+    }
   }, []);
 
   return (

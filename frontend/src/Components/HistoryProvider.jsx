@@ -9,9 +9,10 @@ export const HistoryProvider = ({ children }) => {
 
   useEffect(() => {
     if (history.length == 0) {
-      setHistory((prevHistory) => [...prevHistory, location.pathname]);
+      history.push(location.pathname);
+      setHistory(history);
     }
-    else if(history.length>0 && history[history.length-1]!=location)
+    else if(history.length>0 && history[history.length-1]!=location.pathname)
       setHistory((prevHistory) => [...prevHistory, location.pathname]);
   }, [location]);
 

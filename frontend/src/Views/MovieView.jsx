@@ -50,12 +50,12 @@ export default function MovieView() {
         <h2 className="font-josefin text-[calc(24px+0.2dvw)]">{data.Title}</h2>
         <div className="flex gap-x-2 flex-wrap text-[calc(12px+0.2dvw)]">
           {data.Type != undefined && (
-            <span className="px-2 py-1 text-center border dark:text-[#ffffffd3] text-[#000000d3] dark:border-[#ffffffd3] border-[#000000d3] rounded-md">
+            <span className="px-1.5 py-0.5 text-center border dark:text-[#ffffffd3] text-[#000000d3] dark:border-[#ffffffd3] border-[#000000d3] rounded-md">
               {data.Type.toLowerCase()}
             </span>
           )}
           {data.Year != undefined && (
-            <span className="px-2 py-1 text-center border dark:text-[#ffffffd3] text-[#000000d3] dark:border-[#ffffffd3] border-[#000000d3] rounded-md">
+            <span className="px-1.5 py-0.5 text-center border dark:text-[#ffffffd3] text-[#000000d3] dark:border-[#ffffffd3] border-[#000000d3] rounded-md">
               {data.Year}
             </span>
           )}

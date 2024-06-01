@@ -2,11 +2,12 @@ import { useEffect, useState } from "react";
 import "../index.css";
 import useHomeStore from "../Stores/HomeStore.js";
 import Camera from "../assets/camera.svg";
-import {Link, useNavigate} from 'react-router-dom'
+import {Link, useLocation, useNavigate} from 'react-router-dom'
 import useLoaderStore from "../Stores/LoaderStore.js";
 import useToastStore from "../Stores/ToastStore.js";
 import { signupService } from "../service/auth/service.js";
 import useUserStore from "../Stores/UserStore.js";
+import { useHistoryPaths } from "../Components/HistoryProvider";
 
 export default function RegisterView() {
   const title = useHomeStore((state) => state.title);
@@ -16,6 +17,8 @@ export default function RegisterView() {
   const isLoggedIn = useUserStore((state) => state.isLoggedIn);
 
   const navigate = useNavigate();
+  const location = useLocation();
+  const history = useHistoryPaths();
 
   const [userEmail, setUserEmail] = useState("");
   const [userName, setUserName] = useState("");
@@ -39,9 +42,19 @@ export default function RegisterView() {
     }
   }
 
+  const moveBack = () => {
+    for (let i = history.length - 1; i >= 0; i--) {
+      if (history[i] != location.pathname) {
+        navigate(history[i]);
+        return;
+      }
+    }
+    navigate("/");
+  };
+
   useEffect(() => {
     if (isLoggedIn) {
-      navigate("/");
+      moveBack();
       return;
     }
     document.title = "Sign Up | MovieHub";
