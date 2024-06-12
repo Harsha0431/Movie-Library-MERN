@@ -184,7 +184,8 @@ export default function LoginView() {
             >
               Login
             </button>
-            <div className="px-1 flex justify-end">
+            {/* //TODO: Remove hidden from forgot password container if intended to complete that modulex*/}
+            <div className="px-1 flex justify-end hidden">
               <button
                 type="button"
                 className="tracking-wide underline text-sm text-gray-300 transition-all hover:text-gray-100"

@@ -5,6 +5,7 @@ import {
   useLocation,
 } from "react-router-dom";
 import HomeView from "./Views/HomeView";
+import TopMoviesHome from "./Views/TopMoviesHome";
 import LoginView from "./Views/LoginView";
 import RegisterView from "./Views/RegisterView";
 import useThemeStore from "./Stores/ThemeStore";
@@ -21,6 +22,7 @@ import SearchView from "./Views/SearchView";
 import MovieView from "./Views/MovieView";
 import { useHistoryPaths } from "./Components/HistoryProvider";
 import NavbarView from "./Components/NavbarView";
+import RecentlyViewed from "./Views/RecentlyViewed";
 
 function App() {
   const isDarkTheme = useThemeStore((state) => state.isDarkTheme);
@@ -51,7 +53,6 @@ function App() {
     if (result.code == 1) {
       result.data = { ...result.data, token: token };
       handleUserLogin(result.data);
-      console.log(history);
       moveBack();
     } else {
       navigate("/login");
@@ -129,7 +130,9 @@ function App() {
         } w-full h-full`}
       >
         <Routes>
-          <Route path="/" element={<HomeView />} />
+          <Route path="/" element={<TopMoviesHome />} />
+          <Route path="/library" element={<HomeView />} />
+          <Route path="/recent" element={<RecentlyViewed />} />
           <Route path="/login" element={<LoginView />} />
           <Route path="/signup" element={<RegisterView />} />
           <Route path="/search" element={<SearchView />} />

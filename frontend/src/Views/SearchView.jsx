@@ -57,6 +57,7 @@ export default function SearchView() {
   }
 
   useEffect(() => {
+    document.title = "Search | MovieHub"
     if (prevSearchText.length > searchText.length) setSearchText(prevSearchText);
     if (searchData.length < totalResults) lastChildObserver();
   }, [searchData.length]);

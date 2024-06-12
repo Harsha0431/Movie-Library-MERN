@@ -31,7 +31,6 @@ export default function RegisterView() {
     updateMainLoader(true);
     const result = await signupService({ name: userName, email: userEmail, password: userPassword });
     updateMainLoader(false);
-    console.log(result);
     if (result.code == 1) {
       addToast(result.message, 'success');
       navigate('/login');

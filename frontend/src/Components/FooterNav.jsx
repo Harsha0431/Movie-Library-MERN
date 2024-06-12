@@ -60,8 +60,29 @@ export default function FooterNav() {
             </TopTooltip>
           </Link>
           <Link
+            to={"/recent"}
+            className="recently_viewed__option inline-flex items-center border-transparent focus:opacity-100 font-medium rounded-full text-sm text-center"
+          >
+            <TopTooltip text={"Recently Viewed"}>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="size-6 dark:fill-[#101415db] dark:hover:fill-[#101415] fill-[#f5f5f5da] hover:fill-[#f5f5f5] transition-all"
+                viewBox="0 0 32 32"
+              >
+                <path
+                  d="M16 32C7.163 32 0 24.837 0 16S7.163 0 16 0s16 7.163 16 16a16 16 0 0 1-16 16m0-30C8.268 2 2 8.268 2 16s6.268 14 14 14s14-6.268 14-14A14 14 0 0 0 16 2"
+                />
+                <path
+                  d="M15 4h2v9.17A3 3 0 0 1 18.83 15H26v2h-7.17A3.001 3.001 0 1 1 15 13.17zm1 13a1 1 0 1 0 0-2a1 1 0 0 0 0 2"
+                  className="ouiIcon__fillSecondary"
+                />
+              </svg>
+            </TopTooltip>
+          </Link>
+          {/* TODO: Remove hidden from library nav option if that module is done*/}
+          <Link
             to={"/library"}
-            className="inline-flex items-center border-transparent focus:opacity-100 font-medium rounded-full text-sm text-center"
+            className="hidden inline-flex items-center border-transparent focus:opacity-100 font-medium rounded-full text-sm text-center"
           >
             <TopTooltip text={"Library"}>
               <svg
@@ -94,7 +115,10 @@ export default function FooterNav() {
             </button>
           </Link>
           {isLoggedIn ? (
-            <div ref={dropdownRef} className="flex items-center justify-center relative">
+            <div
+              ref={dropdownRef}
+              className="flex items-center justify-center relative"
+            >
               <button
                 onClick={toggleDropdown}
                 className="inline-flex items-center border-transparent focus:opacity-100 font-medium rounded-full text-sm text-center"

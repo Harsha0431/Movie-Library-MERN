@@ -53,16 +53,22 @@ const OMDb_API_URL = process.env.OMDb_URI;
 const OMDb_TOP_LIST_SEED = process.env.OMDb_TOP_LIST_SEED;
 app.get("/api/top/movies", cacheMiddleware, async (request, response) => {
   let movieList = [];
-  let page = 1;
-  while (movieList.length < 15) {
+  const requestPage = parseInt(request.query.page) || 1;
+  let requestLimit = parseInt(request.query.limit) || 10;
+  if (requestPage == 1) {
+    requestLimit = 20;
+  }
+  let page = requestPage;
+  while (movieList.length < requestLimit) {
     const list = await getTopMovieList(page);
     if (list.length > 0) {
       movieList = movieList.concat(list);
       page += 1;
     } else break;
   }
-  cacheManagement.setInCache(request.originalUrl, movieList);
-  response.json({ code: 1, message: "Top movies list fetched", data: movieList });
+  if(requestPage==1)
+    cacheManagement.setInCache(request.originalUrl, movieList);
+  response.json({ code: 1, message: "Top movies list fetched", data: movieList, page: page });
 });
 
 async function getTopMovieList(page = 1) {
