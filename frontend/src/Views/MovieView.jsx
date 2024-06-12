@@ -62,7 +62,7 @@ export default function MovieView() {
       fetchData();
     }
   }, []);
-  return dataFetched && data != null ? (
+  return dataFetched ?(data != null ? (
     <div className="data__container w-full px-4 max-md:px-2 flex gap-x-4 gap-y-3 h-full overflow-hidden max-md:flex-col">
       <div className="poster__container overflow-hidden h-auto w-max items-center flex justify-center max-md:min-h-[50dvh] max-md:w-full max-md:justify-center">
         <img
@@ -280,5 +280,6 @@ export default function MovieView() {
         Try Again
       </button>
     </div>
-  );
+  )) :
+  <div></div>;
 }

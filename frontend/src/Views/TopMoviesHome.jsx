@@ -40,6 +40,9 @@ export default function HomeView() {
         if (result.page != undefined && result.page != null) {
           updateTopMoviesPage(result.page);
         }
+        else {
+          updateTopMoviesPage(topMoviesPage + 1);
+        }
       }
     }
   }

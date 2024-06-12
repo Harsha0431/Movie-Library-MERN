@@ -66,8 +66,7 @@ app.get("/api/top/movies", cacheMiddleware, async (request, response) => {
       page += 1;
     } else break;
   }
-  if(requestPage==1)
-    cacheManagement.setInCache(request.originalUrl, movieList);
+  cacheManagement.setInCache(request.originalUrl, movieList);
   response.json({ code: 1, message: "Top movies list fetched", data: movieList, page: page });
 });
 
